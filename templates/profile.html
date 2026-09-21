@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile - Kujangoo</title>
+</head>
+
+<body style="
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+">
+
+    <div style="
+        background: #131921;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    ">
+        <h1 style="margin: 0;">👤 My Profile</h1>
+    </div>
+
+    <div style="
+        max-width: 700px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    ">
+
+        <h2 style="margin-top: 0;">Personal Information</h2>
+
+        <hr>
+        {% if user.profile_image %}
+    <div style="text-align: center; margin-bottom: 25px;">
+        <img src="{{ user.profile_image.url }}"
+             alt="Profile Image"
+             style="
+                 width: 130px;
+                 height: 130px;
+                 object-fit: cover;
+                 border-radius: 50%;
+                 border: 3px solid #ff9900;
+             ">
+    </div>
+{% else %}
+    <div style="text-align: center; margin-bottom: 25px;">
+        <div style="
+            width: 130px;
+            height: 130px;
+            margin: auto;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        ">
+            👤
+        </div>
+    </div>
+{% endif %}
+        <p>
+            <strong>First Name:</strong>
+            {{ user.first_name|default:"Not provided" }}
+        </p>
+
+        <p>
+            <strong>Last Name:</strong>
+            {{ user.last_name|default:"Not provided" }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user.email }}
+        </p>
+
+        <p>
+            <strong>Phone Number:</strong>
+            {{ user.phone_number }}
+        </p>
+
+        <h2>✏️ Edit Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>First Name</strong></label><br>
+        <input type="text" name="first_name" value="{{ user.first_name }}">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>Last Name</strong></label><br>
+        <input type="text" name="last_name" value="{{ user.last_name }}">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>Phone Number</strong></label><br>
+        <input type="text" name="phone_number" value="{{ user.phone_number }}">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>Profile Picture</strong></label><br>
+
+        <input
+            type="file"
+            name="profile_image"
+            accept="image/*"
+        >
+    </div>
+
+    <button type="submit">
+        💾 Save Changes
+    </button>
+</form>
+
+    
+<hr>
+
+        <hr>
+
+        <div style="margin-top: 25px;">
+
+            <a href="{% url 'my_orders' %}"
+               style="
+                   display: inline-block;
+                   background: #ff9900;
+                   color: black;
+                   padding: 12px 20px;
+                   border-radius: 6px;
+                   text-decoration: none;
+                   font-weight: bold;
+                   margin-right: 10px;
+               ">
+                📦 My Orders
+            </a>
+
+            <a href="{% url 'wishlist' %}"
+               style="
+                   display: inline-block;
+                   background: #ff4444;
+                   color: white;
+                   padding: 12px 20px;
+                   border-radius: 6px;
+                   text-decoration: none;
+                   font-weight: bold;
+               ">
+                ❤️ Wishlist
+            </a>
+
+        </div>
+
+        <br>
+
+        <a href="{% url 'home' %}"
+           style="
+               color: #0066c0;
+               text-decoration: none;
+           ">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>

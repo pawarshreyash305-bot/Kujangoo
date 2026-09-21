@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kujangoo - Online Shopping</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* HEADER */
+        .header {
+            background: #111827;
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .search button {
+            padding: 12px 20px;
+            border: none;
+            background: #fbbf24;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        /* CATEGORY BAR */
+        .categories {
+            background: white;
+            padding: 15px 5%;
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .category {
+            font-weight: bold;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+            margin: 20px 5%;
+            padding: 50px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 12px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            background: #111827;
+            color: white;
+            padding: 13px 25px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        /* PRODUCTS */
+        .section {
+            padding: 20px 5%;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .product-image {
+    height: 200px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    color: #777;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+        .product h3 {
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #777;
+            margin-left: 8px;
+        }
+
+        .buy-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #fbbf24;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 40px;
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 700px) {
+            .header {
+                flex-wrap: wrap;
+            }
+
+            .search {
+                order: 3;
+                width: 100%;
+            }
+
+            .hero {
+                padding: 30px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="logo">
+            Kujangoo
+        </div>
+
+        <div class="search">
+         <form method="GET" action="{% url 'home' %}">
+    <input
+        type="text"
+        name="search"
+        value="{{ search }}"
+        placeholder="Search products..."
+    >
+
+    <button type="submit">
+        🔎 Search
+    </button>
+</form>
+        </div>
+
+        <div class="header-links">
+            <span>👤 Account</span>
+            <a href="{% url 'cart' %}" style="color: white; text-decoration: none;">
+    🛒 Cart
+</a>
+<a href="{% url 'wishlist' %}"
+   style="color: white; text-decoration: none;">
+    ❤️ Wishlist
+</a>
+
+{% if user.is_authenticated %}
+
+    <span style="color: white;">
+        👋 {{ user.first_name|default:user.email }}
+    </span>
+
+
+    <a href="{% url 'profile' %}"
+   style="color: white; text-decoration: none;">
+    👤 My Profile
+</a>
+    <a href="{% url 'my_orders' %}"
+       style="color: white; text-decoration: none;">
+        📦 My Orders
+    </a>
+
+    <a href="{% url 'logout' %}"
+       style="color: white; text-decoration: none;">
+        🚪 Logout
+    </a>
+
+{% else %}
+
+    <a href="{% url 'login' %}"
+       style="color: white; text-decoration: none;">
+        🔐 Login
+    </a>
+
+    <a href="{% url 'register' %}"
+       style="color: white; text-decoration: none;">
+        👤 Register
+    </a>
+
+{% endif %}
+
+        </div>
+
+    </header>
+
+
+    <!-- CATEGORY BAR -->
+    <nav class="categories">
+
+    <nav class="categories">
+
+    <div class="category">
+        <a href="{% url 'home' %}"
+           style="text-decoration: none; color: inherit;">
+            All
+        </a>
+    </div>
+
+    {% for category in categories %}
+        <div class="category">
+            <a href="{% url 'home' %}?category={{ category.id }}"
+               style="text-decoration: none; color: inherit;">
+                {{ category.name }}
+            </a>
+        </div>
+    {% endfor %}
+
+</nav>
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <h1>Welcome to Kujangoo 🛍️</h1>
+
+        <p>
+            Discover amazing products at amazing prices.
+        </p>
+
+        <a href="#" class="shop-btn">
+            Shop Now
+        </a>
+
+    </section>
+
+
+  
+    <!-- PRODUCTS -->
+<section class="section">
+
+    <h2>🔥 Today's Deals</h2>
+
+    <div class="products">
+
+        {% for product in products %}
+
+            <div class="product">
+
+                <div class="product-image">
+                    {% if product.image %}
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                            style="width: 100%; height: 180px; object-fit: contain;"
+                        >
+                    {% else %}
+                        Product Image
+                    {% endif %}
+                </div>
+
+               <a href="{% url 'product_detail' product.id %}"
+   style="text-decoration: none; color: inherit;">
+    <h3>{{ product.name }}</h3>
+</a>
+
+<p>{{ product.description }}</p>
+
+                <br>
+
+                <span class="price">
+                    ₹{{ product.price }}
+                </span>
+
+                {% if product.original_price %}
+                    <span class="old-price">
+                        ₹{{ product.original_price }}
+                    </span>
+                {% endif %}
+
+<a
+    href="{% url 'add_to_cart' product.id %}"
+    class="buy-btn"
+    style="display: block; text-align: center; text-decoration: none;"
+>
+    Add to Cart 🛒
+</a>
+            </div>
+
+        {% empty %}
+
+            <p>
+                No products available right now.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h2>Kujangoo</h2>
+
+        <br>
+
+        <p>
+            Your trusted online shopping destination.
+        </p>
+
+        <br>
+
+        <p>
+            © 2026 Kujangoo. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

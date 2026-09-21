@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kujangoo - My Wishlist</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .wishlist-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-image {
+            width: 180px;
+            height: 180px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .details h2 {
+            margin-top: 0;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111;
+            margin: 10px 0;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #ff9900;
+            color: black;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .buy-btn:hover {
+            background: #e68a00;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>❤️ My Wishlist</h1>
+
+        <a href="{% url 'home' %}" class="back">
+            ← Back to Home
+        </a>
+    </div>
+
+
+    {% for item in wishlist_items %}
+
+        <div class="wishlist-item">
+
+            <div class="product-image">
+
+                {% if item.product.image %}
+
+                    <img
+                        src="{{ item.product.image.url }}"
+                        alt="{{ item.product.name }}"
+                    >
+
+                {% else %}
+
+                    No Image
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="details">
+
+                <h2>{{ item.product.name }}</h2>
+
+                <div class="price">
+                    ₹{{ item.product.price }}
+                </div>
+
+                <div class="description">
+                    {{ item.product.description }}
+                </div>
+
+                <a
+                    href="{% url 'add_to_cart' item.product.id %}"
+                    class="buy-btn"
+                >
+                    🛒 Add to Cart
+                </a>
+
+                <a
+    href="{% url 'remove_from_wishlist' item.product.id %}"
+    class="buy-btn"
+    style="background: #ff4444; color: white; margin-left: 10px;"
+>
+    🗑️ Remove
+</a>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty">
+
+            <h2>Your Wishlist is Empty ❤️</h2>
+
+            <p>
+                Products you add to your wishlist will appear here.
+            </p>
+
+            <a href="{% url 'home' %}" class="buy-btn">
+                Start Shopping
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

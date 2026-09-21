@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kujangoo - My Orders</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .order {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            color: #ff9900;
+            font-weight: bold;
+        }
+
+        .item {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .address {
+            margin-top: 15px;
+            color: #555;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📦 My Orders</h1>
+
+        <a href="{% url 'home' %}" class="back">
+            ← Back to Home
+        </a>
+    </div>
+
+    {% for order in orders %}
+
+        <div class="order">
+
+            <div class="order-header">
+                <div>
+                    <strong>Order #{{ order.id }}</strong>
+                    <br>
+                    {{ order.created_at|date:"d M Y, h:i A" }}
+                </div>
+
+                <div class="status">
+                    {{ order.status }}
+                </div>
+            </div>
+
+            <h3>Products</h3>
+
+            {% for item in order.items.all %}
+
+                <div class="item">
+                    <strong>{{ item.product.name }}</strong>
+                    <br>
+                    Quantity: {{ item.quantity }}
+                    <br>
+                    Price: ₹{{ item.price }}
+                </div>
+
+            {% endfor %}
+
+            <div class="total">
+                Total: ₹{{ order.total_amount }}
+            </div>
+
+            <div class="address">
+                <strong>Delivery Address:</strong>
+                <br>
+                {{ order.address }}
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty">
+            <h2>No orders yet 📦</h2>
+            <p>Your placed orders will appear here.</p>
+
+            <a href="{% url 'home' %}">
+                Start Shopping
+            </a>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
